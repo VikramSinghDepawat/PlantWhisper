@@ -44,7 +44,10 @@ final class PlantEntity {
         confidence: Double,
         plantDescription: String,
         careInstructions: String,
-        imageURL: URL? = nil
+        imageURL: URL? = nil,
+        growthRecords: [GrowthRecordEntity] = [],
+        reminders: [CareReminderEntity] = [],
+        searchHistory: [SearchHistoryEntity] = []
     ) {
         self.id = id
         self.commonName = commonName
@@ -54,8 +57,8 @@ final class PlantEntity {
         self.careInstructions = careInstructions
         self.imageURL = imageURL
         
-        self.growthRecords = []
-        self.reminders = []
-        self.searchHistory = []
+        self.growthRecords = growthRecords
+        self.reminders = reminders
+        self.searchHistory = searchHistory
     }
 }
