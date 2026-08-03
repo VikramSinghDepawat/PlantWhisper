@@ -9,9 +9,16 @@ import SwiftUI
 
 @main
 struct PlantWhisperApp: App {
+    
+    @State private var container = AppContainer()
+    @State private var environment = AppEnvironment()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AppContainer(
+                container: container
+                environment: environment
+            )
         }
     }
 }

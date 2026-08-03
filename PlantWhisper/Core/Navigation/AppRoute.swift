@@ -6,3 +6,19 @@
 //
 
 import Foundation
+
+enum AppRoute: Hashable {
+    
+    case settings
+    
+    case identifyPlant
+    
+    case diseaseDetection
+    
+    case history
+    
+    case reminders
+    
+    case growthTracking
+    
+}

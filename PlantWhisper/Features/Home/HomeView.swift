@@ -8,11 +8,40 @@
 import SwiftUI
 
 struct HomeView: View {
+    
+    @State private var viewModel: HomeViewModel
+    
+    init(viewModel: HomeViewModel) {
+        _viewModel = State(initialValue: viewModel)
+    }
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            Section {
+                NavigationLink(value: AppRoute.settings) {
+                    Label("Settings", systemImage: "gear")
+                }
+            }
+            
+            Section("Coming Soon") {
+                Label("AI Plant Identification", systemImage: "camera.viewfinder")
+                Label("Disease Detection", systemImage: "cross.case")
+                Label("Weekly Care Tips", systemImage: "leaf")
+                Label("Weather-aware Watering", systemImage: "cloud.sun.rain")
+                Label("Growth Tracking", systemImage: "chart.line.uptrend.xyaxis")
+            }
+        }
+        .navigationTitle(viewModel.title)
     }
 }
 
 #Preview {
-    HomeView()
+    NavigationStack {
+        HomeView(
+            viewModel: HomeViewModel(
+                container: AppContainer(),
+                environment: AppEnvironment()
+            )
+        )
+    }
 }
