@@ -29,7 +29,7 @@ struct OpenAIRequest: Codable, Sendable {
 extension OpenAIRequest {
     
     struct InputMessage: Codable, Sendable {
-        
+        let type: String
         let role: String
         let content: [Content]
         
@@ -37,6 +37,7 @@ extension OpenAIRequest {
             role: String,
             content: [Content]
         ) {
+            self.type = "message"
             self.role = role
             self.content = content
         }
@@ -47,27 +48,99 @@ extension OpenAIRequest {
 
 extension OpenAIRequest {
     
-    struct Content: Codable, Sendable {
+    enum Content: Codable, Sendable {
         
-        let type: String
+        case inputText(String)
+        case inputImage(imageURL: String, detail: ImageDetail = .auto)
         
-        let text: String?
-        let imageURL: String?
+        enum ImageDetail: String, Codable, Sendable {
+            case low
+            case high
+            case auto
+        }
         
         enum CodingKeys: String, CodingKey {
             case type
             case text
             case imageURL = "image_url"
+            case detail
         }
         
-        init(
-            type: String,
-            text: String? = nil,
-            imageURL: String? = nil
-        ) {
-            self.type = type
-            self.text = text
-            self.imageURL = imageURL
+        enum ContentType: String, Codable {
+            case inputText = "input_text"
+            case inputImage = "input_image"
+        }
+        
+        init(from decoder: any Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            
+            let type = try container.decode(ContentType.self, forKey: .type)
+            
+            switch type {
+            case .inputText:
+                
+                let text = try container.decode(
+                    String.self,
+                    forKey: .text
+                )
+                
+                self = .inputText(text)
+                
+            case .inputImage:
+                
+                let url = try container.decode(
+                    String.self,
+                    forKey: .imageURL
+                )
+                
+                let detail = try container.decodeIfPresent(
+                    ImageDetail.self,
+                    forKey: .detail
+                ) ?? .auto
+                
+                self = .inputImage(
+                    imageURL: url,
+                    detail: detail
+                )
+            }
+        }
+        
+        func encode(to encoder: any Encoder) throws {
+            var container = encoder.container(
+                keyedBy: CodingKeys.self
+            )
+            
+            switch self {
+                
+            case .inputText(let text):
+                
+                try container.encode(
+                    ContentType.inputText,
+                    forKey: .type
+                )
+                
+                try container.encode(
+                    text,
+                    forKey: .text
+                )
+                
+            case .inputImage(let imageURL, let detail):
+                
+                try container.encode(
+                    ContentType.inputImage,
+                    forKey: .type
+                )
+                
+                try container.encode(
+                    imageURL,
+                    forKey: .imageURL
+                )
+                
+                try container.encode(
+                    detail,
+                    forKey: .detail
+                )
+            }
         }
     }
 }

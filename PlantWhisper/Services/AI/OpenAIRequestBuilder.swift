@@ -9,33 +9,50 @@ import Foundation
 
 struct OpenAIRequestBuilder {
     
-    struct Request: Sendable {
-        
-        let imageData: Data
-        let systemPrompt: String
-        let jsonSchema: String
-        
-        init(
-            imageData: Data,
-            systemPrompt: String,
-            jsonSchema: String
-        ) {
-            self.imageData = imageData
-            self.systemPrompt = systemPrompt
-            self.jsonSchema = jsonSchema
-        }
-    }
-    
     func build(
         imageData: Data,
         systemPrompt: String,
-        jsonSchema: String
-    ) -> Request {
+        configuration: OpenAIAPIConfiguration,
+        schema: some OpenAIJSONSchema
+    ) -> OpenAIRequest {
         
-        Request(
-            imageData: imageData,
-            systemPrompt: systemPrompt,
-            jsonSchema: jsonSchema
+        let dataURL = makeDataURL(from: imageData)
+        
+        return OpenAIRequest(
+            model: configuration.model,
+            input: [
+                .init(
+                    role: "user",
+                    content: [
+                        .inputText(systemPrompt),
+                        .inputImage(
+                            imageURL: dataURL,
+                            detail: .high
+                        )
+                    ]
+                )
+            ],
+            text: .init(
+                format: .init(
+                    name: schemaName,
+                    schema: schema,
+                    strict: true
+                )
+            )
         )
+    }
+}
+
+// MARK: - Private
+
+private extension OpenAIRequestBuilder {
+    
+    func makeDataURL(
+        from imageData: Data
+    ) -> String {
+        
+        let base64 = imageData.base64EncodedString()
+        
+        return "data:image/jpeg;base64,\(base64)"
     }
 }

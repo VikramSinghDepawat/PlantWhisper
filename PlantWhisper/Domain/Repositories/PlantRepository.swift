@@ -16,14 +16,17 @@ protocol PlantRepository: Sendable {
     func identifyPlant(from imageData: Data) async throws -> Plant
     
     /// Detects plant disease from an image
-    func detectDisease(from imageData: Data) async throws -> PlantDisease
+//    func detectDisease(from imageData: Data) async throws -> PlantDisease
         
     /// Retrieves a previously identified plant.
     ///
     /// - Parameter id: Unique plant identifier.
     ///
-    func plant(withID id: UUID) async throws -> Plant
+//    func plant(withID id: UUID) async throws -> Plant
     
     /// Retrieves all identified plants.
-    func fetchPlants() async throws -> [Plant]
+    func fetchAll() async throws -> [Plant]
+    
+    /// Save a Plant
+    func save(_ plant: Plant) async throws
 }
