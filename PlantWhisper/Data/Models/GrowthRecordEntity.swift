@@ -11,37 +11,41 @@ import SwiftData
 @Model
 final class GrowthRecordEntity {
     
+    // MARK: - Identity
+    
     @Attribute(.unique)
     var id: UUID
     
-    /// References the owning plant.
-    var plantID: UUID
+    // MARK: - Relationship
     
-    /// Date the growth record was created.
+    @Relationship
+    var plant: PlantEntity
+    
+    // MARK: - Growth Data
+    
     var recordedAt: Date
     
     /// Height in centimeters.
     var heightInCentimeters: Double?
     
-    /// Optional user note.
+    /// Optional observation.
     var note: String?
     
-    /// Identifier used to retrieve the stored image.
+    /// Identifier of the stored photo.
     var photoIdentifier: String?
     
-    @Relationship(inverse: \PlantEntity.reminders)
-    var plant: PlantEntity
+    // MARK: - Initialization
     
     init(
         id: UUID = UUID(),
-        plantID: UUID,
+        plant: PlantEntity,
         recordedAt: Date = .now,
         heightInCentimeters: Double? = nil,
         note: String? = nil,
         photoIdentifier: String? = nil
     ) {
         self.id = id
-        self.plantID = plantID
+        self.plant = plant
         self.recordedAt = recordedAt
         self.heightInCentimeters = heightInCentimeters
         self.note = note

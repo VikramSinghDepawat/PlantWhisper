@@ -11,16 +11,22 @@ import SwiftData
 @Model
 final class CareReminderEntity {
     
+    // MARK: - Reminder Type
+
     enum ReminderType: String, Codable {
         case watering
         case fertilizing
     }
     
+    // MARK: - Identity
     @Attribute(.unique)
     var id: UUID
     
-    var plantID: UUID
+    // MARK: - Relationship
+    @Relationship
+    var plant: PlantEntity
     
+    // MARK: - Reminder
     var type: ReminderType
     
     var title: String
@@ -31,9 +37,17 @@ final class CareReminderEntity {
     
     var isEnabled: Bool
     
-    init(id: UUID = UUID(), plantID: UUID, type: ReminderType, title: String, message: String, scheduledDate: Date, isEnabled: Bool = true) {
+    init(
+        id: UUID = UUID(),
+        plant: PlantEntity,
+        type: ReminderType,
+        title: String,
+        message: String,
+        scheduledDate: Date,
+        isEnabled: Bool = true
+    ) {
         self.id = id
-        self.plantID = plantID
+        self.plant = plant
         self.type = type
         self.title = title
         self.message = message

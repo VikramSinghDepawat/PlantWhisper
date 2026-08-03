@@ -11,33 +11,30 @@ import SwiftData
 @MainActor
 final class SwiftDataStack {
     
-    // MARK: - Properties
-    
     let container: ModelContainer
+    let mainContext: ModelContext
     
-    var mainContext: ModelContext {
-        container.mainContext
-    }
-    
-    // MARK: - Initialization
-    
-    init(isStoredInMemoryOnly: Bool = false) throws {
+    init(
+        inMemory: Bool = false
+    ) throws {
         
         let schema = Schema([
             PlantEntity.self,
             PlantDiseaseEntity.self,
-            CareReminderEntity.self,
             GrowthRecordEntity.self,
+            CareReminderEntity.self,
             SearchHistoryEntity.self
         ])
         
         let configuration = ModelConfiguration(
-            isStoredInMemoryOnly: isStoredInMemoryOnly
+            isStoredInMemoryOnly: inMemory
         )
         
         container = try ModelContainer(
             for: schema,
             configurations: [configuration]
         )
+        
+        mainContext = ModelContext(container)
     }
 }

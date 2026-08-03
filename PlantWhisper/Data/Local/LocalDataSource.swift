@@ -10,29 +10,21 @@ import SwiftData
 
 protocol LocalDataSource: Sendable {
     
-    // MARK: - Fetch
-    
     func fetch<T: PersistentModel>(
-        descriptor: FetchDescriptor<T>
+        _ descriptor: FetchDescriptor<T>
     ) throws -> [T]
     
     func fetchOne<T: PersistentModel>(
-        descriptor: FetchDescriptor<T>
+        _ descriptor: FetchDescriptor<T>
     ) throws -> T?
-    
-    // MARK: - Insert
     
     func insert<T: PersistentModel>(
         _ model: T
-    ) throws
-    
-    // MARK: - Delete
+    )
     
     func delete<T: PersistentModel>(
         _ model: T
-    ) throws
-    
-    // MARK: - Save
+    )
     
     func save() throws
 }
@@ -40,39 +32,43 @@ protocol LocalDataSource: Sendable {
 @MainActor
 final class SwiftDataLocalDataSource: LocalDataSource {
     
-    private let modelContext: ModelContext
+    private let context: ModelContext
     
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
+    init(
+        context: ModelContext
+    ) {
+        self.context = context
     }
     
     func fetch<T: PersistentModel>(
-        descriptor: FetchDescriptor<T>
+        _ descriptor: FetchDescriptor<T>
     ) throws -> [T] {
-        try modelContext.fetch(descriptor)
+        try context.fetch(descriptor)
     }
     
     func fetchOne<T: PersistentModel>(
-        descriptor: FetchDescriptor<T>
+        _ descriptor: FetchDescriptor<T>
     ) throws -> T? {
-        try modelContext.fetch(descriptor).first
+        try context.fetch(descriptor).first
     }
     
     func insert<T: PersistentModel>(
         _ model: T
-    ) throws {
-        modelContext.insert(model)
+    ) {
+        context.insert(model)
     }
     
     func delete<T: PersistentModel>(
         _ model: T
-    ) throws {
-        modelContext.delete(model)
+    ) {
+        context.delete(model)
     }
     
     func save() throws {
-        if modelContext.hasChanges {
-            try modelContext.save()
+        guard context.hasChanges else {
+            return
         }
+        
+        try context.save()
     }
 }

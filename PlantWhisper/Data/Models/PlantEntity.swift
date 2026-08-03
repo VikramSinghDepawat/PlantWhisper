@@ -35,6 +35,9 @@ final class PlantEntity {
     @Relationship(deleteRule: .cascade, inverse: \SearchHistoryEntity.plant)
     var searchHistory: [SearchHistoryEntity]
     
+    @Relationship(deleteRule: .cascade, inverse: \PlantDiseaseEntity.plant)
+    var diseaseAnalyses: [PlantDiseaseEntity]
+    
     // MARK: - Initialization
     
     init(
@@ -47,7 +50,8 @@ final class PlantEntity {
         imageURL: URL? = nil,
         growthRecords: [GrowthRecordEntity] = [],
         reminders: [CareReminderEntity] = [],
-        searchHistory: [SearchHistoryEntity] = []
+        searchHistory: [SearchHistoryEntity] = [],
+        diseaseAnalyses: [PlantDiseaseEntity] = []
     ) {
         self.id = id
         self.commonName = commonName
@@ -60,5 +64,6 @@ final class PlantEntity {
         self.growthRecords = growthRecords
         self.reminders = reminders
         self.searchHistory = searchHistory
+        self.diseaseAnalyses = diseaseAnalyses
     }
 }
