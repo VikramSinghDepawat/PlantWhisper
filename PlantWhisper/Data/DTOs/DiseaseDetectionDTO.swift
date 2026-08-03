@@ -1,5 +1,5 @@
 //
-//  PlantDisease.swift
+//  DiseaseDetectionDTO.swift
 //  PlantWhisper
 //
 //  Created by Vikram Singh Depawat on 03/08/26.
@@ -7,15 +7,14 @@
 
 import Foundation
 
-struct PlantDisease: Identifiable, Sendable, Codable, Equatable {
+struct DiseaseDetectionDTO: Codable, Sendable {
     
-    enum Severity: String, CaseIterable, Codable, Sendable {
+    enum Severity: String, Codable, Sendable {
         case low
         case medium
         case high
     }
     
-    let id: UUID
     let name: String
     let confidence: Double
     let severity: Severity
@@ -24,8 +23,15 @@ struct PlantDisease: Identifiable, Sendable, Codable, Equatable {
     let treatment: [String]
     let prevention: [String]
     
-    init(id: UUID, name: String, confidence: Double, severity: Severity, symptoms: [String], causes: [String], treatment: [String], prevention: [String]) {
-        self.id = id
+    init(
+        name: String,
+        confidence: Double,
+        severity: Severity,
+        symptoms: [String],
+        causes: [String],
+        treatment: [String],
+        prevention: [String]
+    ) {
         self.name = name
         self.confidence = confidence
         self.severity = severity

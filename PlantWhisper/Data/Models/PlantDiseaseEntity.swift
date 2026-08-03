@@ -1,28 +1,31 @@
 //
-//  PlantDisease.swift
+//  PlantDiseaseEntity.swift
 //  PlantWhisper
 //
 //  Created by Vikram Singh Depawat on 03/08/26.
 //
 
 import Foundation
+import SwiftData
 
-struct PlantDisease: Identifiable, Sendable, Codable, Equatable {
+@Model
+final class PlantDiseaseEntity {
     
-    enum Severity: String, CaseIterable, Codable, Sendable {
+    enum Severity: String, Codable {
         case low
         case medium
         case high
     }
     
-    let id: UUID
-    let name: String
-    let confidence: Double
-    let severity: Severity
-    let symptoms: [String]
-    let causes: [String]
-    let treatment: [String]
-    let prevention: [String]
+    @Attribute(.unique)
+    var id: UUID
+    var name: String
+    var confidence: Double
+    var severity: Severity
+    var symptoms: [String]
+    var causes: [String]
+    var treatment: [String]
+    var prevention: [String]
     
     init(id: UUID, name: String, confidence: Double, severity: Severity, symptoms: [String], causes: [String], treatment: [String], prevention: [String]) {
         self.id = id

@@ -12,7 +12,6 @@ struct CareReminder: Identifiable, Equatable, Sendable {
     enum ReminderType: String, CaseIterable, Codable, Sendable {
         case watering
         case fertilizing
-        case pruning
     }
     
     let id: UUID
@@ -20,17 +19,17 @@ struct CareReminder: Identifiable, Equatable, Sendable {
     let type: ReminderType
     let title: String
     let message: String
-    let scheduleDate: Date
-    let isEnable: Bool
+    let scheduledDate: Date
+    let isEnabled: Bool
     
-    init(id: UUID, plantID: UUID, type: ReminderType, title: String, message: String, scheduleDate: Date, isEnable: Bool) {
+    init(id: UUID, plantID: UUID, type: ReminderType, title: String, message: String, scheduledDate: Date, isEnabled: Bool) {
         self.id = id
         self.plantID = plantID
         self.type = type
         self.title = title
         self.message = message
-        self.scheduleDate = scheduleDate
-        self.isEnable = isEnable
+        self.scheduledDate = scheduledDate
+        self.isEnabled = isEnabled
     }
     
 }
